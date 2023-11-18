@@ -4,14 +4,12 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.AdapterView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.neta.tugas_room.database.Note
 import com.neta.tugas_room.database.NoteDao
 import com.neta.tugas_room.database.NoteRoomDatabase
 import com.neta.tugas_room.databinding.ActivityMainBinding
-import java.nio.file.Files.delete
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -19,7 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var noteAdapter: NoteAdapter
-    private lateinit var mNoteDao: NoteDao // Tambahkan ini
+    private lateinit var mNoteDao: NoteDao
     private lateinit var executorService: ExecutorService
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         noteAdapter = NoteAdapter(emptyList()) { selectedNote ->
-            // Handle item click event if needed
         }
 
         val db = NoteRoomDatabase.getDatabase(this)
@@ -43,8 +40,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intentToNoteActivity)
             })
 
-            // Menggunakan LinearLayoutManager
-            rvNote.layoutManager = LinearLayoutManager(this@MainActivity)
+            rvNote.layoutManager = GridLayoutManager(this@MainActivity,1)
             rvNote.adapter = noteAdapter
             getNotes()
 
@@ -58,6 +54,7 @@ class MainActivity : AppCompatActivity() {
     private fun getNotes() {
         mNoteDao.allNotes.observe(this) { notes ->
             noteAdapter.setData(notes)
+            noteAdapter.notifyDataSetChanged()
         }
     }
 

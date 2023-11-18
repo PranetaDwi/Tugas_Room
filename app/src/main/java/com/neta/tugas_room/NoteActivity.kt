@@ -31,7 +31,7 @@ class NoteActivity : AppCompatActivity() {
 
 
         NoteAdapter = NoteAdapter(emptyList()) { selectedNote ->
-            // Handle item click event if needed
+
         }
 
         with(binding){
